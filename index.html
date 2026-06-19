@@ -1401,6 +1401,129 @@ button.primary {
   background: #2563eb;
   color: white;
 }
+
+/* =========================================================
+   📱 MOBILE RESPONSIVE FIXES
+   (DO NOT TOUCH SIDEBAR)
+========================================================= */
+
+@media (max-width: 768px) {
+
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 200px; /* keep sidebar */
+    width: calc(100% - 200px);
+    padding: 10px;
+  }
+
+  /* ALL FORM CONTROLS */
+  input,
+  select,
+  textarea {
+    width: 100% !important;
+    max-width: 100%;
+    margin: 5px 0;
+  }
+
+  /* BUTTONS */
+  button,
+  .primary-btn,
+  .secondary-btn,
+  .load-btn,
+  .action-btn {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  /* ACTION BUTTON GROUPS */
+  .action-buttons,
+  .action-groups {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* DROPDOWNS */
+  .dropdown-actions,
+  .action-group {
+    width: 100%;
+  }
+
+  .action-master-btn {
+    width: 100%;
+    min-width: unset;
+  }
+
+  /* CARDS */
+  .card,
+  .report-card,
+  .dashboard-card {
+    width: 100%;
+    margin: 8px 0;
+  }
+
+  /* REPORT GRID */
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* DASHBOARD */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* AUTH CARD */
+  .auth-card {
+    width: 95%;
+    padding: 20px;
+  }
+
+  /* MODALS */
+  .modal-box {
+    width: 95%;
+  }
+
+  /* TABLES */
+  .table-wrapper,
+  .table-responsive,
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* SUPPORT STAFF */
+  #supportStaffTableWrapper {
+    padding: 5px;
+  }
+
+  /* SCHOOL TITLE */
+  .school-title {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  /* DASHBOARD HEADER */
+  .dashboard-header {
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+  }
+}
+
+table {
+  min-width: max-content;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.form-row > * {
+  flex: 1;
+  min-width: 180px;
+}
 </style>
 </head>
 

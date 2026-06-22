@@ -11879,41 +11879,85 @@ async function loadLearnersFromStudents() {
 }
     });
 
-    window.__learnerQueue = [];
+   window.__learnerQueue = [];
 
-    let recordedCount = 0;
-    let firstPending = null;
+let recordedCount = 0;
+let firstPending = null;
 
-    snapshot.forEach(child => {
+// ==================================================
+// COLLECT LEARNERS FIRST
+// ==================================================
+const learners = [];
 
-      const data = child.val();
-      if (data.grade !== grade) return;
+snapshot.forEach(child => {
 
-      const isRecorded = recordedMap[child.key];
+  const data = child.val();
 
-      const obj = {
-        key: child.key,
-        name: data.name || "Unknown"
-      };
+  if (data.grade !== grade) return;
 
-      const opt = document.createElement("option");
-      opt.value = child.key;
+  learners.push({
+    key: child.key,
+    name: (data.name || "Unknown").trim(),
+    data
+  });
 
-      if (isRecorded) {
-        opt.textContent = `✔ ${data.name} (Recorded)`;
-        opt.disabled = true;
-        opt.style.color = "#c62828";
-        opt.style.fontWeight = "bold";
-        opt.style.background = "#ffebee";
-        recordedCount++;
-      } else {
-        opt.textContent = data.name;
-        window.__learnerQueue.push(obj);
-        if (!firstPending) firstPending = obj;
-      }
+});
 
-      learnerSelect.appendChild(opt);
-    });
+// ==================================================
+// SORT ALPHABETICALLY BY NAME
+// ==================================================
+learners.sort((a, b) =>
+  a.name.localeCompare(
+    b.name,
+    undefined,
+    { sensitivity: "base" }
+  )
+);
+
+// ==================================================
+// BUILD DROPDOWN AFTER SORTING
+// ==================================================
+learners.forEach(item => {
+
+  const isRecorded =
+    recordedMap[item.key];
+
+  const obj = {
+    key: item.key,
+    name: item.name
+  };
+
+  const opt =
+    document.createElement("option");
+
+  opt.value = item.key;
+
+  if (isRecorded) {
+
+    opt.textContent =
+      `✔ ${item.name} (Recorded)`;
+
+    opt.disabled = true;
+    opt.style.color = "#c62828";
+    opt.style.fontWeight = "bold";
+    opt.style.background = "#ffebee";
+
+    recordedCount++;
+
+  } else {
+
+    opt.textContent = item.name;
+
+    window.__learnerQueue.push(obj);
+
+    if (!firstPending) {
+      firstPending = obj;
+    }
+  }
+
+  learnerSelect.appendChild(opt);
+
+});
 
     window.__currentLearnerIndex = 0;
 

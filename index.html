@@ -36450,6 +36450,46 @@ window.deleteUser = async function(uid) {
 document.addEventListener("DOMContentLoaded", () => {
   window.loadUsersTable();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const splash = document.getElementById("splashScreen");
+  const auth = document.getElementById("authSection");
+  const welcomeText = document.getElementById("welcomeText");
+
+  auth.style.display = "none";
+
+  // TYPE EFFECT
+  const text = "Welcome to Smart School ERP";
+  let i = 0;
+
+  setTimeout(() => {
+    welcomeText.style.opacity = "1";
+    welcomeText.style.transform = "translateY(0)";
+
+    const typing = setInterval(() => {
+      welcomeText.textContent += text[i];
+      i++;
+      if (i >= text.length) clearInterval(typing);
+    }, 40);
+
+  }, 600);
+
+  // EXIT SEQUENCE
+  setTimeout(() => {
+
+    splash.classList.add("splash-exit");
+
+    setTimeout(() => {
+      splash.style.display = "none";
+      auth.style.display = "flex";
+    }, 800);
+
+  }, 2600);
+
+});
+
+
 </script>
 
 

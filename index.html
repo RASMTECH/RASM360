@@ -46,21 +46,43 @@ li{
 /* =========================================================
    🌍 MAIN LAYOUT
 ========================================================= */
-
 .main{
   margin-left:240px;
-  padding:20px;
   width:calc(100% - 240px);
+  padding:20px;
+  min-height:100vh;
+  transition:all .3s ease;
 }
+.sidebar button.active{
+  background:#22c55e !important;
+  color:#fff !important;
+  font-weight:700;
 
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.1);
+}
 /* =========================================================
    🌍 SIDEBAR
 ========================================================= */
 
 .sidebar{
-  width:200px;
+  width:240px;
   height:100vh;
-  background:#0f172a;
+
+  background:linear-gradient(
+    -45deg,
+    #0f172a,
+    #1e3a8a,
+    #7c3aed,
+    #059669,
+    #dc2626,
+    #f59e0b
+  );
+
+  background-size:400% 400%;
+
+  animation:sidebarColors 15s ease infinite;
+
   color:#fff;
 
   position:fixed;
@@ -73,8 +95,54 @@ li{
   overflow:hidden;
 
   z-index:1000;
+
+  box-shadow:
+    4px 0 20px rgba(0,0,0,.25);
+}
+@keyframes sidebarColors{
+  0%{
+    background-position:0% 50%;
+  }
+
+  25%{
+    background-position:50% 100%;
+  }
+
+  50%{
+    background-position:100% 50%;
+  }
+
+  75%{
+    background-position:50% 0%;
+  }
+
+  100%{
+    background-position:0% 50%;
+  }
+}
+.sidebar{
+  backdrop-filter:blur(12px);
+  border-right:1px solid rgba(255,255,255,.1);
+}
+.sidebar{
+  animation:
+    sidebarColors 15s ease infinite,
+    sidebarGlow 4s ease-in-out infinite;
 }
 
+@keyframes sidebarGlow{
+  0%,100%{
+    box-shadow:
+      0 0 15px rgba(37,99,235,.3),
+      4px 0 20px rgba(0,0,0,.25);
+  }
+
+  50%{
+    box-shadow:
+      0 0 30px rgba(168,85,247,.6),
+      4px 0 25px rgba(0,0,0,.35);
+  }
+}
 /* HEADER */
 
 .sidebar-header{
@@ -100,15 +168,20 @@ li{
   flex:1;
   overflow-y:auto;
   padding:15px;
+  scroll-behavior:smooth;
 }
 
 .sidebar-scroll::-webkit-scrollbar{
-  width:6px;
+  width:8px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track{
+  background:transparent;
 }
 
 .sidebar-scroll::-webkit-scrollbar-thumb{
-  background:#475569;
-  border-radius:10px;
+  background:#334155;
+  border-radius:20px;
 }
 
 /* MENU */
@@ -123,15 +196,19 @@ li{
   margin-bottom:10px;
   letter-spacing:1px;
 }
-
 .sidebar button,
 .dropdown{
   width:100%;
+  min-height:46px;
+
+  display:flex;
+  align-items:center;
+
   margin-bottom:10px;
-  padding:12px;
+  padding:12px 14px;
 
   border:none;
-  border-radius:10px;
+  border-radius:12px;
 
   background:#1e293b;
   color:white;
@@ -140,17 +217,12 @@ li{
   text-align:left;
 
   font-size:14px;
+  font-weight:500;
 
-  transition:all .25s ease;
-}
-
-.sidebar button:hover{
-  background:#14532d;
-  color:#fff;
-
-  transform:translateX(3px);
-
-  box-shadow:0 2px 8px rgba(20,83,45,0.35);
+  transition:
+    background .25s ease,
+    transform .25s ease,
+    box-shadow .25s ease;
 }
 
 /* SPECIAL BUTTONS */
@@ -167,13 +239,30 @@ li{
 .green-btn{
   background:#16a34a !important;
 }
-
 .logout-btn{
-  background:#dc2626 !important;
-  width:90%;
-  margin:15px auto;
-  display:block;
+  width:calc(100% - 30px);
+
+  margin:15px;
+
+  background:#dc2626;
+  color:white;
+
+  border:none;
+  border-radius:12px;
+
+  padding:12px;
+
   text-align:center;
+  cursor:pointer;
+
+  position:sticky;
+  bottom:15px;
+
+  transition:.25s ease;
+}
+
+.logout-btn:hover{
+  background:#b91c1c;
 }
 
 /* SUBMENU */
@@ -242,25 +331,7 @@ li{
 
   z-index: 10;
 }
-.logout-btn{
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
 
-  width: 90%;
-
-  z-index: 999;
-
-  background: #dc2626;
-  color: white;
-
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-
-  cursor: pointer;
-}
 .subscription-box{
   background:#1e293b;
   padding:12px;
@@ -375,25 +446,19 @@ button.primary{
 ========================================================= */
 
 #authSection{
-  height:100vh;
+  position:fixed;
+  inset:0;
 
   display:flex;
-  align-items:center;
   justify-content:center;
-
-  position:relative;
+  align-items:center;
 
   overflow:hidden;
 
-  background:
-    linear-gradient(
-      135deg,
-      #0f2027,
-      #203a43,
-      #2c5364
-    );
-}
+  background:#f3f4f6;
 
+  animation:loginFade .6s ease forwards;
+}
 /* PARTICLES */
 
 #authSection::before{
@@ -782,16 +847,7 @@ button.primary{
    🌍 REPORTS
 ========================================================= */
 
-.report-grid{
-  display:grid;
 
-  grid-template-columns:
-    repeat(auto-fit,minmax(220px,1fr));
-
-  gap:15px;
-
-  margin-top:15px;
-}
 
 .report-card{
   background:#fff;
@@ -1420,7 +1476,8 @@ button.primary{
 }
 .report-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  grid-template-columns:
+    repeat(auto-fit,minmax(220px,1fr));
   gap:15px;
 }
 
@@ -1542,28 +1599,10 @@ button.primary{
     print-color-adjust: exact;
   }
 }
-
-.primary-btn,
-.secondary-btn{
-  width:100%;
-  margin-bottom:10px;
-}
-
-.secondary-btn{
-  background:#2563eb;
-  color:white;
-}
-
-.primary-btn{
-  background:#16a34a;
-  color:white;
-}
-
 .modal-box {
   position: relative;
 }
 
-/* CLOSE BUTTON FIX */
 .close-btn {
   position: absolute;
   top: 10px;
@@ -1585,10 +1624,6 @@ button.primary{
   font-size: 16px;
   cursor: pointer;
   padding: 0;
-}
-
-.close-btn:hover {
-  background: #dc2626;
 }
 
 #floatingSchoolsCounter {
@@ -1616,23 +1651,26 @@ button.primary{
    📱 MOBILE RESPONSIVE FIXES
    (DO NOT TOUCH SIDEBAR)
 ========================================================= */
+@media (max-width:768px){
 
-@media (max-width: 768px) {
-
-  /* MAIN CONTENT */
-  .main {
-    margin-left: 200px; /* keep sidebar */
-    width: calc(100% - 200px);
-    padding: 10px;
+  .sidebar{
+    width:240px;
   }
 
+  .main{
+    margin-left:240px;
+    width:calc(100% - 240px);
+    padding:10px;
+  }
+
+}
   /* ALL FORM CONTROLS */
   input,
   select,
-  textarea {
-    width: 100% !important;
-    max-width: 100%;
-    margin: 5px 0;
+  textarea{
+    width:100% !important;
+    max-width:100%;
+    margin:5px 0;
   }
 
   /* BUTTONS */
@@ -1640,86 +1678,202 @@ button.primary{
   .primary-btn,
   .secondary-btn,
   .load-btn,
-  .action-btn {
-    width: 100%;
-    margin-bottom: 8px;
+  .action-btn{
+    width:100%;
+    margin-bottom:8px;
   }
 
   /* ACTION BUTTON GROUPS */
   .action-buttons,
-  .action-groups {
-    flex-direction: column;
-    align-items: stretch;
+  .action-groups{
+    flex-direction:column;
+    align-items:stretch;
   }
 
   /* DROPDOWNS */
   .dropdown-actions,
-  .action-group {
-    width: 100%;
+  .action-group{
+    width:100%;
   }
 
-  .action-master-btn {
-    width: 100%;
-    min-width: unset;
-  }
-
-  /* CARDS */
-  .card,
-  .report-card,
-  .dashboard-card {
-    width: 100%;
-    margin: 8px 0;
+  .action-master-btn{
+    width:100%;
+    min-width:unset;
   }
 
   /* REPORT GRID */
-  .report-grid {
-    grid-template-columns: 1fr;
+  .report-grid{
+    grid-template-columns:1fr;
   }
 
   /* DASHBOARD */
-  .dashboard-grid {
-    grid-template-columns: 1fr;
+  .dashboard-grid{
+    grid-template-columns:1fr;
+    gap:12px;
+  }
+
+  .dashboard-card{
+    min-height:auto;
+    padding:15px;
+    gap:12px;
+    overflow:hidden;
+  }
+
+  .card-icon{
+    width:50px;
+    height:50px;
+    font-size:22px;
+  }
+
+  .card-content{
+    flex:1;
+    min-width:0;
+  }
+
+  .card-content h3{
+    font-size:13px;
+    line-height:1.3;
+  }
+
+  .card-content p{
+    font-size:20px;
+    line-height:1.3;
+    word-break:break-word;
+    overflow-wrap:break-word;
+  }
+
+  #currentDateTime{
+    font-size:15px !important;
+    line-height:1.4;
+    white-space:normal;
   }
 
   /* MODALS */
-  .modal-box {
-    width: 95%;
+  .modal-box{
+    width:95%;
   }
 
   /* TABLES */
   .table-wrapper,
   .table-responsive,
-  .table-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .table-container{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
   }
 
   /* SUPPORT STAFF */
-  #supportStaffTableWrapper {
-    padding: 5px;
+  #supportStaffTableWrapper{
+    padding:5px;
   }
 
   /* SCHOOL TITLE */
-  .school-title {
-    font-size: 16px;
-    padding: 10px;
+  .school-title{
+    font-size:16px;
+    padding:10px;
   }
 
   /* DASHBOARD HEADER */
-  .dashboard-header {
-    width: 100%;
-    text-align: center;
-    font-size: 18px;
+  .dashboard-header{
+    width:100%;
+    text-align:center;
+    font-size:18px;
   }
 }
+
+@keyframes logoPulse {
+  0% { transform: scale(1); opacity:1; }
+  50% { transform: scale(1.12); opacity:0.85; }
+  100% { transform: scale(1); opacity:1; }
+}
+
+@keyframes glowMove {
+  0% { transform: translateY(-20px) scale(1); }
+  50% { transform: translateY(20px) scale(1.2); }
+  100% { transform: translateY(-20px) scale(1); }
+}
+
+/* PREMIUM EXIT */
+.splash-exit {
+  animation: splashZoomOut 0.8s ease forwards;
+}
+
+@keyframes splashZoomOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+}
+
 </style>
 </head>
 
 <body>
 
+<div id="splashScreen" style="
+  position:fixed;
+  inset:0;
+background: radial-gradient(circle at center, #ffffff 0%, #f3f4f6 60%, #e5e7eb 100%);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  z-index:99999;
+  overflow:hidden;
+">
+  
+  <!-- soft glow background -->
+  <div style="
+    position:absolute;
+    width:200px;
+    height:200px;
+    background:#2563eb;
+    filter:blur(90px);
+    opacity:0.25;
+    border-radius:50%;
+    animation:glowMove 3s infinite ease-in-out;
+  "></div>
 
+  <img src="https://i.imgur.com/D8RXDZi.jpeg"
+       style="
+         width:92px;
+         height:92px;
+         border-radius:18px;
+         object-fit:cover;
+         animation:logoPulse 1.8s infinite ease-in-out;
+         box-shadow:0 15px 35px rgba(0,0,0,0.5);
+         z-index:2;
+       ">
+<h2 style="
+  color:#ef4444;
+  margin-top:12px;
+  font-size:16px;
+  letter-spacing:1px;
+  z-index:2;
+">
+  RASM TECH
+</h2>
 
-<!-- ===================================================== -->
+<!-- animated typing text -->
+<p id="welcomeText" style="
+  color:#ef4444;
+  font-size:13px;
+  margin-top:6px;
+  opacity:0;
+  transform:translateY(8px);
+  transition:all 0.6s ease;
+  z-index:2;
+">
+</p>
+
+</div>
 <!-- ===================================================== -->
 <!-- AUTH SECTION -->
 <!-- ===================================================== -->
@@ -1798,8 +1952,8 @@ button.primary{
       font-weight:700;
       line-height:1.8;
     ">
-      ✔ 1 Term Free Trial<br>
-      ✔ Auto Subscription Activation<br>
+  
+
       ✔ Full School ERP Access<br>
       ✔ Enjoy all modules
     </div>
@@ -1928,99 +2082,33 @@ button.primary{
 
   <h4>MAIN MENU</h4>
 
-  <button id="menuDashboard"
-    onclick="show('dashboard')">
-    🏠 Dashboard
+   <button id="menuDashboard" onclick="show('dashboard')">🏠 Dashboard</button>
+  <button id="menuStudents" onclick="show('students')">👨🎓 Students</button>
+  <button id="menuTeachers" onclick="show('teachers')">👨🏫 Teachers</button>
+  <button id="menuSupportStaff" onclick="show('supportStaff')">🧹 Support Staff</button>
+  <button id="menuICT" onclick="show('ict')">💻 ICT</button>
+  <button id="menuAttendance" onclick="show('attendanceSection')">🗓️ Attendance</button>
+  <button id="checkResultsBtn" onclick="show('checkResultsSection')">📊 Check Results</button>
+  <button id="menuELearning" onclick="show('eLearningSection')">🎓 E-Learning</button>
+  <button id="menuAssignmentHelp" onclick="show('assignmentHelpSection')">🧠 Assignment Help</button>
+  <button id="menuLibrary" onclick="show('library')">📚 Library</button>
+
+  <button id="menuFees" onclick="show('fees')">💰 Fees</button>
+  <button onclick="show('feeBalanceSection')">💰 Fee Balance</button>
+  <button id="menuWallet" onclick="show('teacherWalletSection')">💰 My Wallet</button>
+  <button onclick="show('withdrawRequestsSection')">💸 Withdrawal Requests</button>
+
+  <button id="menuTransport" onclick="show('transport')">🚌 Transport</button>
+  <button id="menuHostel" onclick="show('hostel')">🏨 Hostel</button>
+  <button id="menuInventory" onclick="show('inventory')">📦 Inventory</button>
+
+  <button id="menuCreateUsers" onclick="show('adminUsersPanel')">👥 Create Users</button>
+  <button id="menuManageUsers" onclick="show('usersSection')">👤 Manage Users</button>
+  <button id="menuRegistrations" onclick="show('registrationRequestsSection')" style="display:none;">
+    🧾 Registration Requests
   </button>
-
-  <button id="menuStudents"
-    onclick="show('students')">
-    👨🎓 Students
-  </button>
-
-  <button id="menuTeachers"
-    onclick="show('teachers')">
-    👨🏫 Teachers
-  </button>
-
-  <button id="menuAttendance"
-    onclick="show('attendanceSection')">
-    🗓️ Attendance
-  </button>
-
-  <button id="menuFees"
-    onclick="show('fees')">
-    💰 Fees
-  </button>
-
-
-<button onclick="show('feeBalanceSection')">
-  💰 Fee Balance
-</button>
-
-
-  <button id="menuSupportStaff"
-    onclick="show('supportStaff')">
-    🧹 Support Staff
-  </button>
-
-  <button id="menuTransport"
-    onclick="show('transport')">
-    🚌 Transport
-  </button>
-
-  <button id="menuHostel"
-    onclick="show('hostel')">
-    🏨 Hostel
-  </button>
-
-  <button id="menuICT"
-    onclick="show('ict')">
-    💻 ICT
-  </button>
-
- <button id="menuInventory"
-  onclick="show('inventory')">
-  📦 Inventory
-</button>
-
-<button id="menuLibrary"
-  onclick="show('library')">
-  📚 Library
-</button>
-<button id="checkResultsBtn"
-  onclick="show('checkResultsSection')">
-  📊 Check Results
-</button>
-<button id="menuELearning"
-  onclick="show('eLearningSection')">
-  🎓 E-Learning
-</button>
-<button id="menuAssignmentHelp"
-  onclick="show('assignmentHelpSection')">
-  🧠 Assignment Help
-</button>
-<!-- FIXED BUTTON (was missing closing tag) -->
-<button id="passwordBtn"
-  onclick="openPasswordModal()">
-  🔐 Change Password
-</button>
-
-
-
-<button id="menuUsers"
-  onclick="show('adminUsersPanel')">
-  👥 Create Users
-</button>
-<button id="menuUsers"
-  onclick="show('usersSection')">
-  👤 Manage Users
-</button>
-
+  <button id="passwordBtn" onclick="openPasswordModal()">🔐 Change Password</button>
 </div>
-
-
-
 <!-- EXAMS -->
 <!-- MAIN MENU -->
 <!-- EXAMS -->
@@ -2338,27 +2426,28 @@ button.primary{
         🎁 FREE 1 TERM TRIAL
       </div>
 
-      <p>
-        No installation required.<br>
-        Access anywhere, anytime.
-      </p>
+<p style="color:#f87171;">
+  No installation required.<br>
+  Access anywhere, anytime.
+</p>
 
-      <hr>
+<hr>
 
-      <div style="
-        background:#ecfdf5;
-        padding:12px;
-        border-radius:10px;
-      ">
-        🌍 Trusted by Schools Across Kenya and Beyond
-      </div>
+<div style="
+  padding:12px;
+  border-radius:10px;
+  color:#f87171;
+  font-weight:600;
+">
+  🌍 Trusted by Schools Across Kenya and Beyond
+</div>
 
-      <br>
+<br>
 
-      <button class="primary-btn"
-        onclick="window.open('https://rasm360.com','_blank')">
-        🚀 Get Started Today
-      </button>
+<button class="primary-btn"
+  onclick="window.open('https://rasm360.com','_blank')">
+  🚀 Get Started Today
+</button>
 
     </div>
 
@@ -2374,6 +2463,7 @@ button.primary{
     </div>
 
   </div>
+
 
 
 <!-- ================= SCHOOL PROFILE MODAL ================= -->
@@ -12701,17 +12791,12 @@ function clearMarksTable() {
 // 🚀 INFINITE ENGINE HELPERS
 // =========================================================
 function getLevel(score) {
-  score = Number(score || 0);
-
-  if (score >= 90) return 8;
-  if (score >= 75) return 7;
-  if (score >= 58) return 6;
-  if (score >= 41) return 5;
-  if (score >= 31) return 4;
-  if (score >= 21) return 3;
-  if (score >= 11) return 2;
-  return 1;
+  if (score >= 70) return 4;  // top level
+  if (score >= 50) return 3;
+  if (score >= 30) return 2;
+  return 1;                     // lowest level
 }
+
 
 
 // =========================================================

@@ -13117,131 +13117,231 @@ async function deleteLearnerMarks(studentId, examPeriod) {
     return Swal.fire("Missing data", "", "error");
   }
 
-  const result = await Swal.fire({
-    title: "Delete Marks?",
-    text: "This will remove all marks for this learner in the selected exam period.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete"
-  });
+const result = await Swal.fire({
+  title: "⚠️ Dangerous Action!",
+  text: "You are about to permanently delete all marks for this learner in the selected exam period. This action cannot be undone.",
+  icon: "error",
+  showCancelButton: true,
+  confirmButtonText: "Yes, delete permanently",
+  cancelButtonText: "Cancel",
+  confirmButtonColor: "#d33",
+  cancelButtonColor: "#3085d6",
+  focusCancel: true
+});
 
   if (!result.isConfirmed) return;
 
   try {
 
-    // 🔥 START LOADER (LIGHT MODE)
     showLoader();
+
     updateProgress(20, "Preparing deletion...");
     await new Promise(r => setTimeout(r, 200));
 
     updateProgress(50, "Removing marks from database...");
     await new Promise(r => setTimeout(r, 200));
 
-    await remove(ref(db, `students/${studentId}/marks/${examPeriod}`));
+    const schoolId =
+      window.schoolId ||
+      localStorage.getItem("schoolId") ||
+      sessionStorage.getItem("schoolId");
 
-    updateProgress(85, "Finalizing changes...");
-    await new Promise(r => setTimeout(r, 200));
-
-    await Swal.fire("Deleted", "Marks removed successfully", "success");
+    await remove(
+      ref(
+        db,
+        `schools/${schoolId}/students/${studentId}/marks/${normalizeExamPeriod(examPeriod)}`
+      )
+    );
 
     updateProgress(100, "Refreshing data...");
-    await new Promise(r => setTimeout(r, 200));
 
-    // refresh table
+    // Refresh marks table
     await loadMarksUnifiedClean();
 
+    // Hide loader before success alert
     hideLoader();
 
+    // Success alert (CENTER)
+    Swal.fire({
+      icon: "success",
+      title: "Deleted Successfully",
+      text: "Marks removed successfully",
+      position: "center",
+      showConfirmButton: false,
+      timer: 2000
+    });
+
   } catch (err) {
+
     console.error(err);
+
     hideLoader();
-    Swal.fire("Error deleting marks", "", "error");
+
+    Swal.fire({
+      icon: "error",
+      title: "Error deleting marks",
+      text: err.message || "Something went wrong"
+    });
   }
 }
 
 async function deleteSelectedLearnersMarks() {
 
-  const examPeriod = document.getElementById("resultsExamPeriod")?.value;
+  const examPeriod =
+    document.getElementById("resultsExamPeriod")?.value;
 
   if (!examPeriod) {
-    return Swal.fire("Select Exam Period", "", "warning");
+    return Swal.fire(
+      "Select Exam Period",
+      "",
+      "warning"
+    );
   }
 
-  const selected = document.querySelectorAll(".learnerCheckbox:checked");
+  const selected =
+    document.querySelectorAll(
+      ".learnerCheckbox:checked"
+    );
 
   if (selected.length === 0) {
-    return Swal.fire("No learners selected", "", "info");
+    return Swal.fire(
+      "No learners selected",
+      "",
+      "info"
+    );
   }
-
-  const result = await Swal.fire({
-    title: "Delete Selected Marks?",
-    text: `You are about to delete marks for ${selected.length} learners`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonText: "Yes, delete all"
-  });
+const result = await Swal.fire({
+  title: "Dangerous Action!",
+  html: `<span style="color:#d33;font-weight:700;">You are about to permanently delete marks for ${selected.length} learners</span>`,
+  icon: "error",
+  showCancelButton: true,
+  confirmButtonText: "Yes, delete all",
+  cancelButtonText: "Cancel",
+  confirmButtonColor: "#d33",
+  cancelButtonColor: "#3085d6",
+  focusCancel: true
+});
 
   if (!result.isConfirmed) return;
 
   try {
 
-    // 🔥 START LOADER
     showLoader();
-    updateProgress(10, "Preparing bulk deletion...");
-    await new Promise(r => setTimeout(r, 300));
+
+    updateProgress(
+      10,
+      "Preparing bulk deletion..."
+    );
+
+    await new Promise(r =>
+      setTimeout(r, 300)
+    );
+
+    const schoolId =
+      window.schoolId ||
+      localStorage.getItem("schoolId") ||
+      sessionStorage.getItem("schoolId");
+
+    if (!schoolId) {
+      hideLoader();
+      return Swal.fire(
+        "School Error",
+        "School ID missing",
+        "error"
+      );
+    }
 
     const total = selected.length;
     let done = 0;
 
-    const promises = [];
+    updateProgress(
+      25,
+      "Starting delete operations..."
+    );
 
-    updateProgress(25, "Queueing delete operations...");
+    await new Promise(r =>
+      setTimeout(r, 300)
+    );
 
-    selected.forEach(cb => {
+    // 🔥 TRUE SEQUENTIAL DELETE
+    for (const cb of selected) {
+
       const studentId = cb.value;
-      const pathRef = ref(db, `students/${studentId}/marks/${examPeriod}`);
-      promises.push({ studentId, task: remove(pathRef) });
-    });
 
-    updateProgress(40, "Deleting records from database...");
-    await new Promise(r => setTimeout(r, 300));
+      const pathRef = ref(
+        db,
+        `schools/${schoolId}/students/${studentId}/marks/${normalizeExamPeriod(examPeriod)}`
+      );
 
-    // 🔥 process sequentially for progress visibility
-    for (let item of promises) {
-
-      await item.task;
+      await remove(pathRef);
 
       done++;
-      const percent = 40 + (done / total) * 50;
+
+      const percent =
+        40 + ((done / total) * 50);
 
       updateProgress(
-        percent,
+        Math.round(percent),
         `Deleted ${done} of ${total} learners...`
       );
 
-      await new Promise(r => setTimeout(r, 150));
+      await new Promise(r =>
+        setTimeout(r, 100)
+      );
     }
 
-    updateProgress(95, "Finalizing cleanup...");
-    await new Promise(r => setTimeout(r, 300));
-
-    await Swal.fire(
-      "Deleted",
-      `Successfully removed marks for ${total} learners`,
-      "success"
+    updateProgress(
+      95,
+      "Finalizing cleanup..."
     );
 
-    updateProgress(100, "Refreshing data...");
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r =>
+      setTimeout(r, 300)
+    );
 
+    updateProgress(
+      100,
+      "Refreshing data..."
+    );
+
+    // 🔥 RELOAD TABLE
     await loadMarksUnifiedClean();
 
+    // 🔥 UNCHECK SELECT ALL
+    const selectAll =
+      document.getElementById(
+        "selectAllStudents"
+      );
+
+    if (selectAll) {
+      selectAll.checked = false;
+    }
+
     hideLoader();
 
+  Swal.fire({
+  icon: "success",
+  title: "Deleted Successfully",
+  text: `Deleted ${total} learners successfully`,
+  position: "center",
+  confirmButtonText: "OK"
+});
+
   } catch (err) {
-    console.error(err);
+
+    console.error(
+      "Bulk delete error:",
+      err
+    );
+
     hideLoader();
-    Swal.fire("Error deleting marks", "", "error");
+
+    Swal.fire(
+      "Error",
+      err.message ||
+        "Failed to delete marks",
+      "error"
+    );
   }
 }
 

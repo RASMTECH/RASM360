@@ -14915,16 +14915,14 @@ async function generateSubjectChampions(selectedGrade, selectedExamPeriod) {
   // ===============================
   // 🔹 LEVELS
   // ===============================
-  function getLevel(score) {
-    if (score >= 90) return "EE 1";
-    if (score >= 75) return "EE 2";
-    if (score >= 58) return "ME 1";
-    if (score >= 41) return "ME 2";
-    if (score >= 31) return "AE 1";
-    if (score >= 21) return "AE 2";
-    if (score >= 11) return "BE 1";
-    return "BE 2";
-  }
+ function getLevel(score) {
+
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
+
+  return "1";                    // Below Expectation
+}
 
   function getPoints(level) {
     return {
@@ -15732,18 +15730,14 @@ window.addEventListener("scroll", () => {
   // ===============================
   // 🔹 LEVEL FUNCTION
   // ===============================
-  function getLevel(score) {
+function getLevel(score) {
 
-    if (score >= 90) return "EE 1";
-    if (score >= 75) return "EE 2";
-    if (score >= 58) return "ME 1";
-    if (score >= 41) return "ME 2";
-    if (score >= 31) return "AE 1";
-    if (score >= 21) return "AE 2";
-    if (score >= 11) return "BE 1";
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
 
-    return "BE 2";
-  }
+  return "1";                    // Below Expectation
+}
 
   // ===============================
   // 🔹 POINTS FUNCTION
@@ -17023,16 +17017,14 @@ window.generateGenderPerformance = async function (selectedGrade, selectedExamPe
   // ===============================
   // 🔹 LEVEL SYSTEM
   // ===============================
-  function getLevel(score) {
-    if (score >= 90) return 8;
-    if (score >= 75) return 7;
-    if (score >= 58) return 6;
-    if (score >= 41) return 5;
-    if (score >= 31) return 4;
-    if (score >= 21) return 3;
-    if (score >= 11) return 2;
-    return 1;
-  }
+function getLevel(score) {
+
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
+
+  return "1";                    // Below Expectation
+}
 
   function getTotalLevel(entry) {
     return (
@@ -17390,16 +17382,14 @@ window.generateSubjectRanking = async function (grade, subjectKey, period) {
 
   const subjectName = subjectNames[subjectKey] || subjectKey;
 
-  function getLevel(score) {
-    if (score >= 90) return "EE 1";
-    if (score >= 75) return "EE 2";
-    if (score >= 58) return "ME 1";
-    if (score >= 41) return "ME 2";
-    if (score >= 31) return "AE 1";
-    if (score >= 21) return "AE 2";
-    if (score >= 11) return "BE 1";
-    return "BE 2";
-  }
+ function getLevel(score) {
+
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
+
+  return "1";                    // Below Expectation
+}
 
 const ranked = learners
   .map(l => {
@@ -18002,18 +17992,14 @@ window.generateMeritList = async function (mainGrade, selectedPeriod) {
   ];
 
   // ================= LEVEL FUNCTION =================
-  function getLevel(score) {
+function getLevel(score) {
 
-    if (score >= 90) return "8";
-    if (score >= 75) return "7";
-    if (score >= 58) return "6";
-    if (score >= 41) return "5";
-    if (score >= 31) return "4";
-    if (score >= 21) return "3";
-    if (score >= 11) return "2";
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
 
-    return "BE 1";
-  }
+  return "1";                    // Below Expectation
+}
 
   // ================= FILTERS =================
   const grade =
@@ -18112,10 +18098,7 @@ window.generateMeritList = async function (mainGrade, selectedPeriod) {
   subjects.forEach(subject => {
 
     levelSummary[subject.key] = {
-      "8": 0,
-      "7": 0,
-      "6": 0,
-      "5": 0,
+     
       "4": 0,
       "3": 0,
       "2": 0,
@@ -18219,35 +18202,22 @@ window.generateMeritList = async function (mainGrade, selectedPeriod) {
 <div id="reportOutput">
 
 ${window.getSchoolPrintHeader("MERIT LIST REPORT")}
-
 <div style="
   text-align:center;
-  margin-bottom:20px;
-  font-size:14px;
+  margin:8px 0 15px;
+  font-size:13px;
+  font-weight:600;
 ">
 
-  <p>
-    <strong>Year:</strong>
-    ${year}
-  </p>
-
-  <p>
-    <strong>Grade:</strong>
-    ${grade || "All Grades"}
-  </p>
-
-  <p>
-    <strong>Exam Period:</strong>
-    ${period || "All Periods"}
-  </p>
-
-  <p>
-    <strong>Total Learners:</strong>
-    ${learnerCount}
-  </p>
+  Year: ${year}
+  &nbsp; | &nbsp;
+  Grade: ${grade || "All Grades"}
+  &nbsp; | &nbsp;
+  Period: ${period || "All Periods"}
+  &nbsp; | &nbsp;
+  Learners: ${learnerCount}
 
 </div>
-
 <div style="flex:1;"></div>
 
 </div>
@@ -18398,10 +18368,7 @@ ${window.getSchoolPrintHeader("MERIT LIST REPORT")}
 <thead>
 <tr>
 <th>Subject</th>
-<th>Level 8</th>
-<th>Level 7</th>
-<th>Level 6</th>
-<th>Level 5</th>
+
 <th>Level 4</th>
 <th>Level 3</th>
 <th>Level 2</th>
@@ -18422,10 +18389,7 @@ ${window.getSchoolPrintHeader("MERIT LIST REPORT")}
   ${subject.name}
 </td>
 
-<td>${levelSummary[subject.key]["8"]}</td>
-<td>${levelSummary[subject.key]["7"]}</td>
-<td>${levelSummary[subject.key]["6"]}</td>
-<td>${levelSummary[subject.key]["5"]}</td>
+
 <td>${levelSummary[subject.key]["4"]}</td>
 <td>${levelSummary[subject.key]["3"]}</td>
 <td>${levelSummary[subject.key]["2"]}</td>
@@ -18525,16 +18489,14 @@ window.combineMarksByGradeWithDetails = async function (selectedGrade, selectedE
     { name: "Creative Art", key: "creativeArt" }
   ];
 
-  function getLevel(score) {
-    if (score >= 90) return "EE 1";
-    if (score >= 75) return "EE 2";
-    if (score >= 58) return "ME 1";
-    if (score >= 41) return "ME 2";
-    if (score >= 31) return "AE 1";
-    if (score >= 21) return "AE 2";
-    if (score >= 11) return "BE 1";
-    return "BE 2";
-  }
+function getLevel(score) {
+
+  if (score >= 75) return "4";   // Exceeding Expectation
+  if (score >= 50) return "3";   // Meeting Expectation
+  if (score >= 25) return "2";   // Approaching Expectation
+
+  return "1";                    // Below Expectation
+}
 
   // ===============================
   // 🔥 FILTER + COMPUTE
@@ -24165,74 +24127,105 @@ window.getSchoolPrintHeader = function (
   title = "SCHOOL REPORT"
 ) {
 
-const school = {
+  const school = {
 
-  name:
-    window.currentSchool?.name ||
-    "School Name",
+    name:
+      window.currentSchool?.name ||
+      "School Name",
 
-  motto:
-    window.currentSchool?.motto || "",
+    motto:
+      window.currentSchool?.motto || "",
 
-  address:
-    window.currentSchool?.address || "",
+    address:
+      window.currentSchool?.address || "",
 
-  logo:
-    window.currentSchool?.logo || ""
+    logo:
+      window.currentSchool?.logo || ""
 
-};
+  };
+
   return `
 
     <div style="
       width:100%;
-      text-align:center;
       border-bottom:3px solid #000;
       padding-bottom:15px;
       margin-bottom:20px;
     ">
 
-      ${
-        school.logo
-          ? `
-        <img
-          src="${school.logo}"
-          style="
-            width:90px;
-            height:90px;
-            object-fit:cover;
-            border-radius:50%;
-            margin-bottom:10px;
-          "
-        >
-      `
-          : ""
-      }
-
-      <h1 style="
-        margin:0;
-        font-size:30px;
-        font-weight:800;
-      ">
-        ${school.name || "RASM 360 SCHOOL"}
-      </h1>
-
       <div style="
-        font-size:15px;
-        margin-top:6px;
-        font-style:italic;
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        width:100%;
       ">
-        ${school.motto || ""}
-      </div>
 
-      <div style="
-        font-size:14px;
-        margin-top:4px;
-      ">
-        ${school.address || ""}
+        <!-- LEFT SPACER -->
+        <div style="
+          width:100px;
+        "></div>
+
+        <!-- SCHOOL DETAILS -->
+        <div style="
+          flex:1;
+          text-align:center;
+        ">
+
+          <h1 style="
+            margin:0;
+            font-size:30px;
+            font-weight:800;
+          ">
+            ${school.name || "RASM 360 SCHOOL"}
+          </h1>
+
+          <div style="
+            font-size:15px;
+            margin-top:6px;
+            font-style:italic;
+          ">
+            ${school.motto || ""}
+          </div>
+
+          <div style="
+            font-size:14px;
+            margin-top:4px;
+          ">
+            ${school.address || ""}
+          </div>
+
+        </div>
+
+        <!-- LOGO FAR RIGHT -->
+        <div style="
+          width:100px;
+          text-align:right;
+        ">
+
+          ${
+            school.logo
+              ? `
+            <img
+              src="${school.logo}"
+              style="
+                width:90px;
+                height:90px;
+                object-fit:cover;
+                border-radius:50%;
+              "
+            >
+          `
+              : ""
+          }
+
+        </div>
+
       </div>
 
       <h2 style="
-        margin-top:18px;
+        text-align:center;
+        margin-top:15px;
+        margin-bottom:0;
         font-size:22px;
       ">
         ${title}
@@ -24242,7 +24235,6 @@ const school = {
 
   `;
 };
-
 // =====================================
 // 🖨️ PRINT SELECTED REPORT
 // =====================================
